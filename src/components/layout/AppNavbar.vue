@@ -3,7 +3,24 @@ import Logo from "../ui/Logo.vue"
 
 export default {
     name: "AppNavbar",
-    components : { Logo }
+    components : { Logo },
+    data() {
+      return {
+        isLoggedIn: false
+      }
+    },
+    created() {
+      const token = localStorage.getItem("token")
+      if (token != null) {
+        this.isLoggedIn = true
+      }
+    },
+    methods: {
+      logout() {
+        localStorage.removeItem("token")
+        this.$router.push("/login")
+      }
+    }
 }
 </script>
 <template>  
@@ -23,9 +40,6 @@ export default {
           <li>
             <router-link to="/home" class="nav-link px-2 text-secondary">Home</router-link>
             </li>  
-          <li>
-            <router-link to="/contact" class="nav-link px-2 text-white">Contact</router-link>
-          </li>
         </ul>
 
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
@@ -33,8 +47,15 @@ export default {
         </form>
 
         <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2">Login</button>
-          <button type="button" class="btn btn-primary">Sign-up</button>
+          <button
+          @click="this.logout"
+           v-if="this.isLoggedIn" 
+           type="button"
+            class="btn btn-outline-light me-2"
+            >
+            Logout
+            </button>
+          <button v-if="!this.isLoggedIn" type="button" class="btn btn-primary">Login</button>
         </div>
       </div>
     </div>

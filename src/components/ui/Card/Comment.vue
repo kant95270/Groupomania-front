@@ -4,6 +4,16 @@ export default {
     name: "Comment",
     components: {
         Avatar
+    },
+    props: {
+        email: {
+            type: String,
+            required: true
+        },
+        content: {
+            type: String,
+            required: true
+        }
     }
 }
 </script>
@@ -12,8 +22,8 @@ export default {
   <div class="d-flex gap-1"> 
     <Avatar></Avatar>
     <div class="d-flex flex-column comment_text p-1">
-    <p>Kant du Gaming</p>
-    <p>Cela donner trop bien le rendu</p>
+    <p>{{ email }}</p>
+    <p>{{ content }}</p>
 </div>
 </div>
 </template>
