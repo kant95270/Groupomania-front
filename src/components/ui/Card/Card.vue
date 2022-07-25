@@ -1,17 +1,17 @@
 <script>
 import Comment from "./Comment.vue"
 import Avatar from "../Avatar.vue"
-import { url , headers} from "./../../../services/fetchOptions"
+import { getUrlAndHeaders } from "./../../../services/fetchOptions"
 export default {
     name: "Card",
     components: {
         Comment,
         Avatar
     },
-    props: ["email", "title", "content", "url", "comments", "id"], 
+    props: ["email",  "content", "url", "comments", "id", "currentUser"], 
     data() {
         return {
-            currentComment: null
+            currentComment: null,
         }
     }, 
    mounted() {},
@@ -19,6 +19,7 @@ export default {
     addComment(e) {
         console.log(this.currentComment)
         console.log(this.$props.id)
+        const { url, headers}= getUrlAndHeaders()
         const options = {
             headers: { ...headers, "Content-Type": "application/json" },
             method: "POST",
@@ -26,8 +27,7 @@ export default {
                 Comment: this.currentComment
             })
         }
-        console.log("options:", options)
-        fetch(url + "/" + this.$props.id, options)  
+        fetch(url + "posts/" + this.$props.id, options)  
         .then((res) => {
             if (res.status === 200) {
                 return res.json()
@@ -44,7 +44,8 @@ export default {
         },
         deletePost(e) {
             console.log("id of the post to delete:", this.$props.id)
-            fetch(url + "/" + this.$props.id, {
+            const { url, headers} = getUrlAndHeaders()
+            fetch(url + "posts/" + this.$props.id, {
                 headers: { ...headers, "Content-Type": "application/json"},
                 method: "DELETE"
             })
@@ -57,10 +58,9 @@ export default {
                 })
                 .then((res) => {
                     console.log("res:", res)
-                    // this.$router.go()
+                    this.$router.go()
                 })
                 .catch((err) => console.log("err:", err))
-                // fetch(url + "/" + this.$props.id)
             }
         }    
     }   
@@ -76,7 +76,7 @@ export default {
         />
 
         <span>{{ email }}</span>
-        <i class="bi bi-trash" @click="deletePost"></i>
+        <i v-if="currentUser === email" class="bi bi-trash" @click="deletePost"></i>
         </div>
 
   <img v-if="url" :src="url" class="card-img-top" alt="..."/>
@@ -86,7 +86,7 @@ export default {
         {{ content }}
         </p>
         <div v-for="comment in comments">
-    <Comment :email="comment.user" :content="comment.content"></Comment>
+    <Comment :email="comment.user.email" :content="comment.content"></Comment>
     </div>
     
     <div class="d-flex gap-1">

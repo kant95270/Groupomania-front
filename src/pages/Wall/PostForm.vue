@@ -1,5 +1,5 @@
 <script>
-import { url, headers } from "./../../services/fetchOptions"
+import { getUrlAndHeaders } from "./../../services/fetchOptions"
 export default {
     name: "PostForm",
     data() {
@@ -13,6 +13,7 @@ export default {
         this.selectedImage = e.target.files[0]
       },
       handleClick() {
+        const {url, headers} = getUrlAndHeaders()
         const formData = new FormData()
         formData.append("content", this.content)
         formData.append("image" , this.selectedImage)
@@ -21,7 +22,7 @@ export default {
           method: "POST",
           body: formData
         }
-        fetch(url, options)
+        fetch(url + "posts" , options)
         .then((res) => {
           if(res.status === 200) {
             return res.json()
@@ -39,8 +40,7 @@ export default {
 </script>
 
 <template>
-<p>hello</p>
-  <div class="form-floating mt-4">
+  <div class="form-floating mt-3">
     <input class="form-control py-3" v-model="content" />    
     </div>
   

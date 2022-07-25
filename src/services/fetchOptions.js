@@ -1,9 +1,15 @@
 const { VITE_SERVER_ADDRESS,VITE_SERVER_PORT} = import.meta.env
-const url =  `http://${VITE_SERVER_ADDRESS}:${VITE_SERVER_PORT}/posts`
+const url = `http://${VITE_SERVER_ADDRESS}:${VITE_SERVER_PORT}/`
 
 const headers = {
-    authorization : `Bearer ${localStorage.getItem("token")}`,
-    "Accept": "application/json",
+    Authorization : `Bearer ${localStorage.getItem("token")}`,
+    "Accept": "application/json"
 }
 
-export { url, headers }
+function getUrlAndHeaders() {
+    return {
+        url, headers
+    }
+}
+
+export { getUrlAndHeaders}

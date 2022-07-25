@@ -1,8 +1,71 @@
 <script>
-function  submitForm (email, password) {
-  console.log(JSON.stringify({ email, password }))
-    const { VITE_SERVER_ADDRESS, VITE_SERVER_PORT } = import.meta.env
-    const url = `http://${VITE_SERVER_ADDRESS}:${VITE_SERVER_PORT}/auth/login`
+import { getUrlAndHeaders } from "./../services/fetchOptions"
+import axios from "axios"
+export default  {
+   name : "LoginPage",
+   data() { 
+  return {
+  username: "kant95270@gmail.com",
+  password: "abc123", 
+  confirmPassword: "abc123",
+  hasInvalidCredentials: false,
+  error: null,
+  isLoginMode: true
+  }           
+},
+    methods: {
+      loginUser,
+      setFormValidity,
+      toggleLoginMode() {
+        this.isLoginMode = !this.isLoginMode
+      },
+      signUp: async function ( email, password, confirmPassword, router) {
+      const  { url } = getUrlAndHeaders()
+      const  body = JSON.stringify({
+         email ,
+            password ,
+            confirmPassword
+         })    
+        const options = {
+          method: "POST",
+          headers : {
+            "Content-Type" : "application/json",
+            "Accept": "application/json"
+          }          
+        }
+        try {
+        await axios.post(url + "auth/signup", body, options)
+        console.log("router:", router)
+       this.$router.go("/")
+        } catch (err) {
+          const error = err.response.data.error
+          this.error = error
+          throw new Error("Failed to signup:" + error)
+           
+        }  
+      }
+    },
+    watch: {
+      username(value) {  
+        const isValueEmpty = value === ""  
+        this.setFormValidity(!isValueEmpty)
+        this.error = null
+      },
+      password(value) {
+        const isValueEmpty = value === ""  
+        this.setFormValidity(!isValueEmpty)
+        this.error = null
+      }
+    }
+}
+
+function setFormValidity(bool) {
+  console.log("setFormValidity:", bool)
+  this.hasInvalidCredentials = !bool
+}
+
+function  loginUser (email, password, router,store) {
+  const { url } =getUrlAndHeaders()
     const options = {
       method: "POST",
       headers: {
@@ -10,7 +73,7 @@ function  submitForm (email, password) {
       },
       body: JSON.stringify({ email, password })
     }
-    fetch(url, options)
+    fetch(url + "auth/login", options)
     .then((res) => {
       console.log(res)
       if (res.ok) return res.json() 
@@ -21,65 +84,28 @@ function  submitForm (email, password) {
       })       
     })
     .then((res) => {
-      console.log("res:", res)
       const token = res.token
-      console.log(token)
       localStorage.setItem("token", token)
-      // this.$router.push({ name:"home"})
+
+      let tokenInCache
+      while (tokenInCache == null) {
+        tokenInCache =localStorage.getItem("token")
+      }
+       this.$router.push("/home")
     })
     .catch((err) => {
       console.error(err)
     }) 
     }
-    
-
-export default  {
-    name : "LoginPage",
-    data,
-    methods: {
-       submitForm,
-      isFormValid
-    },
-    watch: {
-      username(value) {  
-        const isValueEmpty = value === ""  
-        this.isFormValid(!isValueEmpty)
-        this.error = null
-      },
-      password(value) {
-        const isValueEmpty = value === ""  
-        this.isFormValid(!isValueEmpty)
-        this.error = null
-      }
-    }
-}
-
-function isFormValid(bool) {
-  console.log("form is invalid:" ,bool)
-  this.hasInvalidCredentials = !bool
-}
-
-function data() { 
-  return {
-  username: "kant95270@gmail.com",
-  password: "abc123", 
-  hasInvalidCredentials: false,
-  error: null
-  }           
-}
 </script>
 
 <template>
   <main class="form-signin">
-  <form :class="this.hasInvalidCredentials ? 'hasErrors': ''">
-    <img
-    class="mb-4 mx-auto" 
-    src="../../public/favicon.ico" 
-    alt="" 
-    width="72"
-     height="57"
-    />
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+  <form :class="this.hasInvalidCredentials ? 'hasErrors' : ''">
+    <img class="mb-4 d-block mx-auto" src="../../public/favicon.ico"   alt=""   width="72" height="57"  />
+    <h1 class="h3 mb-3 fw-normal"> 
+      {{ this.isLoginMode ? "Please sign in" : "Please enter your data" }}
+      </h1>
 
     <div class="form-floating">
       <input
@@ -88,10 +114,9 @@ function data() {
       id="floatingInput" 
       placeholder="name@example.com"
       v-model="username"
-      require="true"
-      @invalid="markFormInvalid"
-      />
- 
+      required="true"
+      @invalid="setFormValidity"
+      /> 
       <label for="floatingInput">Email address</label>
     </div>
     <div class="form-floating">
@@ -101,25 +126,50 @@ function data() {
       id="floatingPassword" 
       placeholder="Password"
       v-model="password"
-      require="true"
-      @invalid="isFormValid"
+      required="true"
+      @invalid="setFormValidity"
+      /> 
+      <label for="floatingPassword">Password</label>
+    </div>
+      <div v-if="!isLoginMode" class="form-floating">
+      <input 
+      type="password" 
+      class="form-control" 
+      placeholder="Confirm Password"
+      v-model="confirmPassword"
+      required="true"
+      @invalid="setFormValidity"
       /> 
       <label for="floatingPassword">Password</label>
     </div>
     <div v-if="hasInvalidCredentials" class="error-msg">Fields cannot be empty</div>
    <div v-if="!hasInvalidCredentials && error" class="error-msg">{{ error }}</div> 
 
-
-    <button 
+    <button
+    v-if="isLoginMode"
     class="w-100 btn btn-lg btn-primary" 
     type="submit" 
-    @click="() => submitForm(this.username, this.password, this.$router)"
+    @click.prevent="
+    () => loginUser(this.username, this.password, this.$router, this.usersStore)
+    "
     :disabled="hasInvalidCredentials"
     >
     Sign in
     </button>
-    <p class="mt-5 mb-3 text-muted">Value: {{ username }}</p>
-    <p class="mt-5 mb-3 text-muted">Password:{{ password }}</p>
+      <button
+    v-else
+    class="w-100 btn btn-lg btn-primary" 
+    type="submit" 
+    @click.prevent="
+    () => signUp(this.username , this.password , this.confirmPassword, this.$router) 
+    "
+    :disabled="hasInvalidCredentials"
+    >
+    Register
+    </button>
+    <p class="mt-1 mb-1" @click.prevent="toggleLoginMode">
+     <a href="">{{ this.isLoginMode ? "Create an account" : "Back to login" }}</a>
+    </p>
   </form>
 </main>
 </template>
@@ -135,7 +185,7 @@ html,
 body {
   height: 100%;
 }
-
+html,
 body {
   align-items: center;
   padding-bottom: 40px;
@@ -146,6 +196,10 @@ body {
   max-width: 330px;
   padding: 15px;
   margin: auto;
+}
+
+.form-signin .checkbox {
+  font-weight: 400;
 }
 
 .form-signin .form-floating:focus-within {
@@ -159,9 +213,12 @@ body {
 }
 
 .form-signin input[type="password"] {
-  margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+button[type="submit"] {
+  margin-block: 16px;
 }
 
   .bd-placeholder-img {
