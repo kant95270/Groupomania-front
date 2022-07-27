@@ -61,6 +61,8 @@ export default {
          :url="post.imageUrl"
           :comments="post.comments"
            :id="post.id"
+           :likes= "Number" 
+            :dislikes= "Number"
            >
         </Card>
 </div>

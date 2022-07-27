@@ -71,7 +71,7 @@ div span {
 }
 
 body {
-  background-color: #5f5f5f1a !important;
+  background-color:  #FD2D01;
 }
 .form-floating > div.form-control {
   height: auto;

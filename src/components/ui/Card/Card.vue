@@ -86,12 +86,16 @@ export default {
         {{ content }}
         </p>
         <div v-for="comment in comments">
+        <i v-if="currentUser === email" class="bi bi-hand-thumbs-up"></i>
     <Comment :email="comment.user.email" :content="comment.content"></Comment>
     </div>
     
     <div class="d-flex gap-1">
         <Avatar></Avatar>
-        <input type="text" class="form-control" placeholder="Username" aria-label="Username" v-model="currentComment" />
+        <input type="text" class="form-control" placeholder="Username" aria-label="Username" v-model="currentComment"
+         />
+        <i v-if="currentUser === email" class="bi bi-hand-thumbs-up"></i>
+        
         <button type="button" class="btn-primary  ms-auto rounded-pill" @click="addComment">Post</button>
     </div>
   </div>
@@ -124,5 +128,14 @@ export default {
 }
 .bi-trash::before {
     font-size: 20px;
+}
+
+.bi-hand-thumbs-up {
+    margin-right: auto;
+}
+.bi-hand-thumbs-up:hover {
+    cursor:pointer;
+    color:blue;
+    transform: scale(1.1);
 }
 </style>

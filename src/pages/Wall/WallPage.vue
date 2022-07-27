@@ -69,6 +69,7 @@ export default {
 h1 {
   font-size: 12px;
   font-weight: bold;
+  color: #333;
   margin-block: 8px;
 }
 </style>

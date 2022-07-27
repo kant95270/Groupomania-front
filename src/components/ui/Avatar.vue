@@ -6,6 +6,7 @@ export default {
 
 <template>
   <img src="https://picsum.photos/50" class="card-img-top rounded-circle shadow-4" alt="...">
+  <i v-if="currentUser === email" class="bi bi-hand-thumbs-up"></i>
  
 </template>
 
