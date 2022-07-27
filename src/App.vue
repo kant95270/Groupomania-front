@@ -14,4 +14,8 @@ export default {
   <router-view></router-view>
 </template>
 
-<style></style>
+<style>
+body {
+  background-color: #5f5f5f1a !important;
+}
+</style>

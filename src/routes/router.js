@@ -32,9 +32,6 @@ function isTokenInCache() {
     return localStorage.getItem("token") != null  
 }
 
-function isTokenValid() {
-    const token = localStorage.getItem("token")
-    return token === "my JWT token"
-}
+
  
 export  { router }

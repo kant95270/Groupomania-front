@@ -34,6 +34,7 @@ export default {
     background-color: var(--bs-gray-200);
     border-radius: 5px;
     width: 100%;
+    margin-block: 8px;
 }
 .card-body > .d-flex {
     margin-bottom: 16px;

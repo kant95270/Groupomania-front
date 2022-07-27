@@ -1,4 +1,4 @@
-const { VITE_SERVER_ADDRESS,VITE_SERVER_PORT} = import.meta.env
+const { VITE_SERVER_ADDRESS,VITE_SERVER_PORT } = import.meta.env
 const url = `http://${VITE_SERVER_ADDRESS}:${VITE_SERVER_PORT}/`
 
 const headers = {
@@ -8,7 +8,8 @@ const headers = {
 
 function getUrlAndHeaders() {
     return {
-        url, headers
+        url, 
+        headers
     }
 }
 

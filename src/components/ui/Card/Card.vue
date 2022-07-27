@@ -11,7 +11,7 @@ export default {
     props: ["email",  "content", "url", "comments", "id", "currentUser"], 
     data() {
         return {
-            currentComment: null,
+            currentComment: null
         }
     }, 
    mounted() {},
@@ -24,7 +24,7 @@ export default {
             headers: { ...headers, "Content-Type": "application/json" },
             method: "POST",
             body: JSON.stringify({
-                Comment: this.currentComment
+                comment: this.currentComment
             })
         }
         fetch(url + "posts/" + this.$props.id, options)  
@@ -40,11 +40,11 @@ export default {
            this.$router.go()
            // this.currentComment = null
         }) 
-        .catch((err) => console.log("err", err))   
+        .catch((err) => console.log("err:", err))   
         },
         deletePost(e) {
             console.log("id of the post to delete:", this.$props.id)
-            const { url, headers} = getUrlAndHeaders()
+            const { url, headers } = getUrlAndHeaders()
             fetch(url + "posts/" + this.$props.id, {
                 headers: { ...headers, "Content-Type": "application/json"},
                 method: "DELETE"
