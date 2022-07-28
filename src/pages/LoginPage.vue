@@ -153,6 +153,8 @@ function  loginUser (email, password, router,store) {
     "
     :disabled="hasInvalidCredentials"
     >
+
+    
     Sign in
     </button>
     <button

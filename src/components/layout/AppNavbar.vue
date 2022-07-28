@@ -25,6 +25,8 @@ export default {
 </script>
 <template>  
    <header class="p-3 bg-dark text-white">
+   
+  
     <div class="container">
       <div 
       class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
@@ -33,7 +35,7 @@ export default {
         to="/"
          class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
          >
-        <Logo class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap" />
+        <Logo class="bi me-2" width="100" height="100" role="img" aria-label="Bootstrap" />
         </router-link>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
@@ -54,8 +56,10 @@ export default {
             class="btn btn-outline-light me-2"
             >
             Logout
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
           <button v-if="!this.isLoggedIn" type="button" class="btn btn-primary">Login</button>
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
         </div>
       </div>
     </div>

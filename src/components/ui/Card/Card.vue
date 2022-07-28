@@ -86,7 +86,7 @@ export default {
         {{ content }}
         </p>
         <div v-for="comment in comments">
-        <i v-if="currentUser === email" class="bi bi-hand-thumbs-up"></i>
+        <i v-if="currentUser === email" class=""></i>
     <Comment :email="comment.user.email" :content="comment.content"></Comment>
     </div>
     
@@ -94,7 +94,6 @@ export default {
         <Avatar></Avatar>
         <input type="text" class="form-control" placeholder="Username" aria-label="Username" v-model="currentComment"
          />
-        <i v-if="currentUser === email" class="bi bi-hand-thumbs-up"></i>
         
         <button type="button" class="btn-primary  ms-auto rounded-pill" @click="addComment">Post</button>
     </div>
@@ -136,6 +135,16 @@ export default {
 .bi-hand-thumbs-up:hover {
     cursor:pointer;
     color:blue;
+    transform: scale(1.1);
+}
+
+.bi-hand-thumbs-down {
+    margin-right: auto;
+}
+
+.bi-hand-thumbs-down:hover {
+     cursor: pointer;
+    color:brown;
     transform: scale(1.1);
 }
 </style>
