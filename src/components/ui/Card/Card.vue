@@ -61,7 +61,29 @@ export default {
                     this.$router.go()
                 })
                 .catch((err) => console.log("err:", err))
+            },
+        handleLike(value) {
+            const { url, headers}= getUrlAndHeaders()
+            const options = {
+                headers: { ...headers, "Content-Type": "application/json" },
+                method: "POST",
+                body: JSON.stringify({
+                    like: value
+                })
             }
+            fetch(url + "posts/" + this.$props.id + "/like", options)  
+            .then((res) => {
+                if (res.status === 200) {
+                    return res.json()
+                } else {
+                    throw new Error("Failed to fetch posts")
+                }
+            })   
+            .then((res) => {
+                console.log("res:",res)
+            }) 
+            .catch((err) => console.log("err:", err)) 
+        }
         }    
     }   
 </script>
@@ -84,6 +106,8 @@ export default {
     <h5 class="card-title">{{ title }}</h5>
     <p class="card-text">
         {{ content }}
+        <i @click="handleLike(1)" class="bi bi-hand-thumbs-up"></i>
+        <i @click="handleLike(-1)" class="bi bi-hand-thumbs-down"></i>
         </p>
         <div v-for="comment in comments">
         <i v-if="currentUser === email" class=""></i>

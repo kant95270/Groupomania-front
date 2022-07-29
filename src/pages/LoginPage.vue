@@ -90,7 +90,7 @@ function  loginUser (email, password, router,store) {
       while (tokenInCache == null) {
         tokenInCache = localStorage.getItem("token")
       }
-       this.$router.push("/home")
+      window.location.href = "/home"
     })
     .catch((err) => {
       console.error(err)
