@@ -26,4 +26,7 @@ npm run dev
 
 ```sh
 npm run build
+
 ```
+### 
+to launch the npm run dev application
